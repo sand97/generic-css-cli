@@ -2,17 +2,26 @@
 const fs = require("fs")
 const path = require("path")
 const express = require('express')
-const process = require("process")
-var cors = require('cors')
+const cors = require('cors')
+const { register } = require('ts-node');
 
+register();
 
-const tailwindConfig = path.join(process.cwd(), 'tailwind.config.js');
+let tailwindConfig = path.join(process.cwd(), 'tailwind.config.js');
 
 if (!fs.existsSync(tailwindConfig)) {
-  throw new Error('Your tailwind.config.js was not found')
+  tailwindConfig = path.join(process.cwd(), 'tailwind.config.ts');
 }
 
+if (!fs.existsSync(tailwindConfig)) {
+  throw new Error('Your tailwind.config.(js|ts) was not found. Make sure you are running this command in folder with tailwind.config.js or tailwind.config.ts');
+}
+
+console.log('tailwindConfig', tailwindConfig)
+
 const config = require(tailwindConfig);
+
+console.log('config', config)
 
 const app = express()
 
