@@ -1,0 +1,19 @@
+{
+  "name": "generic-css-cli",
+  "version": "0.0.1",
+  "repository": "https://github.com/sand97/generic-css-plugin.git",
+  "description": "A cli to expose css or tailwind config with rest API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bruce Guenkam",
+  "license": "ISC",
+  "bin": {
+    "generic-css-cli": "./index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
