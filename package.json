@@ -1,6 +1,6 @@
 {
   "name": "generic-css-cli",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": "https://github.com/sand97/generic-css-cli",
   "description": "A cli to expose css or tailwind config with rest API",
   "main": "index.js",
@@ -14,12 +14,10 @@
     "generic-css-cli": "./index.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "@types/node": "^22.10.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
-  },
-  "devDependencies": {
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
   }
 }
