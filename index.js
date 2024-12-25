@@ -19,7 +19,6 @@ console.log('tailwindConfigPath', tailwindConfigPath);
 
 (async () => {
   let config;
-  config = require(tailwindConfigPath);
   try {
     if (tailwindConfigPath.endsWith('.ts')) {
       const { register } = require('ts-node');
