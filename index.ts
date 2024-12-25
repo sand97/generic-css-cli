@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env npx tsx
 import * as fs from 'fs';
 import * as path from 'path';
 import express from 'express';
@@ -6,7 +6,9 @@ import cors from 'cors';
 const args = process.argv.slice(2);
 
 // import { fileURLToPath } from 'url';
-// import { register } from 'ts-node';
+import { register } from 'ts-node';
+
+register();
 
 // Helpers to work with file paths\
 
@@ -22,13 +24,14 @@ if (args.length > 0) {
   }
 }
 
+console.log('tailwindConfigPath:', tailwindConfigPath);
+
 if (!fs.existsSync(tailwindConfigPath)) {
   throw new Error(
       'Your tailwind.config.(js|ts) was not found. Make sure you are running this command in a folder with tailwind.config.js or tailwind.config.ts'
   );
 }
 
-console.log('tailwindConfigPath:', tailwindConfigPath);
 
 (async () => {
   let config;

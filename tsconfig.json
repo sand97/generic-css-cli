@@ -1,6 +1,9 @@
+// tsconfig.esm.json
 {
   "compilerOptions": {
-    "types": ["node"],
-    "allowJs": true
-  }
+    "esModuleInterop": true,
+    "declaration": true,  // Optional for type declarations
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules"]
 }
