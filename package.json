@@ -1,6 +1,6 @@
 {
   "name": "generic-css-cli",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": "https://github.com/sand97/generic-css-cli",
   "description": "A cli to expose css or tailwind config with rest API",
   "main": "index.js",
