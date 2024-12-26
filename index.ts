@@ -6,14 +6,16 @@ import cors from 'cors';
 const args = process.argv.slice(2);
 
 // import { fileURLToPath } from 'url';
+
 import { register } from 'ts-node';
+import { URL } from 'url';
 
 register();
 
 // Helpers to work with file paths\
 
 // Dynamically resolve Tailwind config path
-let tailwindConfigPath
+let tailwindConfigPath: string;
 
 if (args.length > 0) {
   tailwindConfigPath = args[0];
