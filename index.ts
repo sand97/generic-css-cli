@@ -34,9 +34,8 @@ if (!fs.existsSync(tailwindConfigPath)) {
   );
 }
 
-
-(async () => {
-  let config;
+async function getConfig() {
+  let config: any;
   try {
     if (tailwindConfigPath.endsWith('.ts')) {
       // Register `ts-node` to handle TypeScript files
@@ -64,6 +63,10 @@ if (!fs.existsSync(tailwindConfigPath)) {
   }
 
   console.log('Loaded config:', config);
+  return config;
+}
+
+(async () => {
 
   const app = express();
   app.use(cors());
@@ -72,7 +75,8 @@ if (!fs.existsSync(tailwindConfigPath)) {
   const port = 7789;
 
   // Endpoint to get the current config
-  app.get('/', (req, res) => {
+  app.get('/', async (req, res) => {
+    const config = await getConfig();
     res.json({
       config,
       folderName: path.basename(process.cwd()),
@@ -80,7 +84,8 @@ if (!fs.existsSync(tailwindConfigPath)) {
   });
 
   // Endpoint to extend the theme
-  app.post('/extend-theme', (req, res) => {
+  app.post('/extend-theme', async (req, res) => {
+    const config = await getConfig();
     const theme = config.theme || {};
     const extend = theme.extend || {};
 
