@@ -37,26 +37,9 @@ if (!fs.existsSync(tailwindConfigPath)) {
 async function getConfig() {
   let config: any;
   try {
-    if (tailwindConfigPath.endsWith('.ts')) {
-      // Register `ts-node` to handle TypeScript files
-      // register({
-      //   // transpileOnly: true, // Avoid full TypeScript checks for faster execution
-      //   // "esModuleInterop": true,
-      //   // compilerOptions: {
-      //   //   module: 'commonjs', // Convert TypeScript to CommonJS for compatibility
-      //   // },
-      // });
-
-      // Import the TypeScript config dynamically
-      const importedConfig = await import(tailwindConfigPath);
-      config = importedConfig.default || importedConfig;
-    } else if (tailwindConfigPath.endsWith('.js')) {
-      // Import JavaScript config
-      const importedConfig = await import(tailwindConfigPath);
-      config = importedConfig.default || importedConfig;
-    } else {
-      throw new Error(`Unsupported config file type: ${path.extname(tailwindConfigPath)}`);
-    }
+    // Import the TypeScript config dynamically
+    const importedConfig = await import(tailwindConfigPath + "?" + Date.now());
+    config = importedConfig.default || importedConfig;
   } catch (error) {
     console.error('Failed to load Tailwind config:', error);
     process.exit(1);
