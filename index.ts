@@ -56,7 +56,7 @@ async function lintFile(file: string) {
     let prettierExist = false,
       eslintExist = false;
 
-    Object.values(devDependencies).forEach((value: string) => {
+    Object.keys(devDependencies).forEach((value: string) => {
       if (value.includes('prettier')) {
         prettierExist = true;
       } else if (value.includes('eslint')) {
