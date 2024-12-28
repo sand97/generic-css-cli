@@ -1,12 +1,12 @@
 {
   "name": "generic-css-cli",
-  "version": "0.0.20",
+  "version": "0.0.22",
   "repository": "https://github.com/sand97/generic-css-cli",
   "description": "A cli to expose css or tailwind config with rest API",
   "type": "module",
   "scripts": {
     "start": "ts-node index.ts",
-    "dev": "node --import=tsx index.ts",
+    "dev": "node --import=tsx index.ts ../plugin/tailwind.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bruce Guenkam",
@@ -21,5 +21,16 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.5",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.7.1"
   }
 }
