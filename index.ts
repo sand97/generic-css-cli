@@ -4,11 +4,10 @@ import * as path from 'path';
 import express from 'express';
 import cors from 'cors';
 const args = process.argv.slice(2);
-
+import { exec } from 'node:child_process';
 // import { fileURLToPath } from 'url';
 
 import { register } from 'ts-node';
-import { URL } from 'url';
 
 register();
 
@@ -30,7 +29,7 @@ console.log('tailwindConfigPath:', tailwindConfigPath);
 
 if (!fs.existsSync(tailwindConfigPath)) {
   throw new Error(
-      'Your tailwind.config.(js|ts) was not found. Make sure you are running this command in a folder with tailwind.config.js or tailwind.config.ts'
+    'Your tailwind.config.(js|ts) was not found. Make sure you are running this command in a folder with tailwind.config.js or tailwind.config.ts'
   );
 }
 
@@ -38,19 +37,54 @@ async function getConfig() {
   let config: any;
   try {
     // Import the TypeScript config dynamically
-    const importedConfig = await import(tailwindConfigPath + "?" + Date.now());
+    const importedConfig = await import(tailwindConfigPath + '?' + Date.now());
     config = importedConfig.default || importedConfig;
   } catch (error) {
     console.error('Failed to load Tailwind config:', error);
     process.exit(1);
   }
 
-  console.log('Loaded config:', config);
   return config;
 }
 
-(async () => {
+async function lintFile(file: string) {
+  const folder = path.dirname(file);
+  const packageJsonPath = path.join(folder, 'package.json');
+  if (fs.existsSync(packageJsonPath)) {
+    const { devDependencies } = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
+    let prettierExist = false,
+      eslintExist = false;
+
+    Object.values(devDependencies).forEach((value: string) => {
+      if (value.includes('prettier')) {
+        prettierExist = true;
+      } else if (value.includes('eslint')) {
+        eslintExist = true;
+      }
+    });
+
+    if (!eslintExist || !prettierExist) {
+      return null;
+    }
+
+    exec(`npx prettier --write ${file}`, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      exec(`npx eslint --fix ${file}`, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log('File was successfully linted and fixed!');
+      });
+    });
+  }
+}
+
+(async () => {
   const app = express();
   app.use(cors());
   app.use(express.json()); // Middleware to parse JSON
@@ -70,30 +104,31 @@ async function getConfig() {
   app.post('/extend-theme', async (req, res) => {
     const config = await getConfig();
     const theme = config.theme || {};
-    const extend = theme.extend || {};
+    let extend = { ...(theme.extend || {}) };
 
-    const keys = ['colors', 'boxShadow', 'fontSize', 'borderRadius'];
-
-    let newTheme = {
-      ...theme,
-    };
+    const keys = ['colors', 'boxShadow', 'fontSize', 'lineHeight', 'fontWeight', 'borderRadius'];
 
     keys.forEach((key) => {
       const newValues = req.body[key] || {};
       const oldValues = extend[key] || {};
 
-      newTheme = {
-        ...newTheme,
-        [key]: {
-          ...oldValues,
-          ...newValues,
-        },
-      };
+      if (Object.keys(newValues).length) {
+        extend = {
+          ...extend,
+          [key]: {
+            ...oldValues,
+            ...newValues,
+          },
+        };
+      }
     });
 
     const newConfig = {
       ...config,
-      theme: newTheme,
+      theme: {
+        ...theme,
+        extend,
+      },
     };
 
     const newConfigContent = `/** @type {import('tailwindcss').Config} */
@@ -106,6 +141,7 @@ export default ${JSON.stringify(newConfig, null, 2)};
         config: newConfig,
         folderName: path.basename(process.cwd()),
       });
+      await lintFile(tailwindConfigPath);
     } catch (error) {
       console.error('Failed to write config:', error);
       res.status(500).json({ error: 'Failed to update Tailwind config' });
