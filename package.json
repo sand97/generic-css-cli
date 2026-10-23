@@ -15,7 +15,6 @@
     "generic-css-cli": "./index.ts"
   },
   "dependencies": {
-    "@types/node": "^22.10.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "ts-node": "^10.9.2",
@@ -25,8 +24,9 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
+    "@types/node": "^24.19.2",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-no-relative-import-paths": "^1.5.5",
